@@ -15,7 +15,7 @@ with open('movie_embeddings.pkl', 'rb') as file:
 movies = pd.read_csv('movies.csv')
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})  # Allow requests from your frontend's origin
 
 @app.route('/')
 def home():
@@ -42,9 +42,9 @@ def recommend():
         if response.status_code == 200:
             omdb_responses.append(response.json())
         else:
-            omdb_responses.append({"error": f'failed to fetch dara for {movie}'})
+            omdb_responses.append({"error": f'failed to fetch data for {movie}'})
     
-    return omdb_responses
+    return jsonify(omdb_responses)  # Ensure the response is JSON serializable
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8000)))

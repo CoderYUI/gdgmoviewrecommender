@@ -1,0 +1,9 @@
+numpy
+scipy
+flask
+flask-cors
+scikit-learn
+pandas
+requests
+sentence-transformers
+gunicorn

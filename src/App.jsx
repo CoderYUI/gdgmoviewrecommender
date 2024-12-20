@@ -42,28 +42,26 @@ export default function App() {
         // Show success toast
         toast.success('Item added to the cart.');
 
-        const response = await fetch('/api/recommend', {
+        const response = await fetch('http://127.0.0.1:8000/api/recommend', {  // Ensure the endpoint matches the Flask route
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             query: movie.name,
-            top_n: 5,
+            top_n: 5  // Ensure you send the required parameters
           }),
         });
 
-        
         if (!response.ok) {
-          throw new Error('Failed to fetch recommendations.');
+          throw new Error('Failed to fetch recommendations');
         }
-        const recommendMovies = await response.json();
-        setRecMovies(recommendMovies); // Add this line to update the state
-        console.log("Recommendations:", recommendMovies);  
+
+        const recommendations = await response.json();
+        setRecMovies(recommendations);  // Update the state with fetched recommendations
+        console.log(recommendations);
       } catch (error) {
-        // Log and show error if recommendation fetch fails
-        console.error('Error while fetching recommendations:', error);
-        toast.error('Failed to fetch recommendations.');
+        console.error('Error while fetching recommendations:', error.message);
       }
     }
   };

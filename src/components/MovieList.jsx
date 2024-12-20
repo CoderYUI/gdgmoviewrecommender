@@ -21,15 +21,20 @@ export default function MovieList({addToCart}) {
                 const response = await fetch('https://imdb8.p.rapidapi.com/title/v2/get-popular?first=20&country=US&language=en-US', {
                     method: 'GET',
                     headers: {
-                        // API key and host for authentication
-                        'x-rapidapi-key': '0176cef2bcmsh87a7de68de66d51p1e03e1jsnba19cbc9b4d6',
-                        'x-rapidapi-host': 'imdb8.p.rapidapi.com'
+                      'x-rapidapi-key': 'e408fd624amsh7f7ae1a16df6fa0p150c4ajsnb9a26f48cdb5',
+                      'x-rapidapi-host': 'imdb8.p.rapidapi.com'
                     }
                 });
                 
                 // Throw an error if the response is not OK
                 if (!response.ok) {
-                    throw new Error('Failed to fetch movies');
+                  if (response.status === 403) {
+                    throw new Error('Forbidden: Check your API key and permissions.');
+                  } else if (response.status === 429) {
+                      throw new Error('Too Many Requests: You have exceeded the rate limit.');
+                  } else {
+                      throw new Error('Failed to fetch movies');
+                }
                 }
                 
                 // Parse the JSON response
